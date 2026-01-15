@@ -1,5 +1,6 @@
 notes_file="/mnt/163A2B503A2B2C65/notepadapp/test1.txt"
 mkdir -p "$(dirname "$notes_file")"
+#to create file if its not there
 if [ ! -f "$notes_file" ]; then
 touch "$notes_file"
 fi
