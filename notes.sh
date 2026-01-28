@@ -1,3 +1,4 @@
+
 current_file="/mnt/163A2B503A2B2C65/notepadapp/test1.txt"
 mkdir -p "$(dirname "$current_file")"
 while true; do
@@ -25,7 +26,9 @@ fi
 continue
 elif [ $exit_code -eq 0 ]; then
 timestamp=$(date "+%Y=%m-%d %H:%M:%S") 
-echo -e "$content\n\n[Saved: $timestamp]" > "$current_file"
+lines=$(wc -l < "$current_file")
+words=$(wc -w < "$current_file")
+echo -e "$content\n\n[Saved: $timestamp]\n[linecount=$lines]\n [words=$words]" > "$current_file"
 zenity --notification --text="Saved"
 else
 break
