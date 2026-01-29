@@ -8,7 +8,7 @@ load_arg="--filename=$current_file"
 else
 load_arg=""
 fi
-content=$(zenity --text-info --editable $load_arg --title="$current_file" --ok-label="Save" --cancel-label="Discard" --extra-button="Open" --extra-button="New file" --width=600 --height=600 --font="Monospace 12")
+content=$(zenity --text-info --editable $load_arg --title="$current_file" --ok-label="Save" --cancel-label="Discard" --extra-button="Open" --extra-button="Open terminal" --extra-button="New file" --extra-button="List files" --width=600 --height=600 --font="Monospace 12")
 exit_code=$?
 if [ "$content" = "New file" ]; then
 new_path=$(zenity --file-selection --save \
@@ -20,10 +20,18 @@ fi
 continue
 elif [ "$content" = "Open" ]; then
 new_selection=$(zenity --file-selection --filename="/mnt/163A2B503A2B2C65/notepadapp/")
-if [ -n "$new_selection" ]; then
-current_file="$new_selection"
-fi
+
+  if [ -n "$new_selection" ]; then
+    current_file="$new_selection"
+   fi
+    continue
+elif [ "$content" = "Open terminal" ]; then
+  ptyxis --new-window &
 continue
+elif [ "$content" = "List files" ]; then
+  ls "/mnt/163A2B503A2B2C65/notepadapp/" | zenity --list --title="file list" --column="files" --width=400 --height=500
+  continue
+
 elif [ $exit_code -eq 0 ]; then
 timestamp=$(date "+%Y=%m-%d %H:%M:%S") 
 lines=$(wc -l < "$current_file")
@@ -31,6 +39,6 @@ words=$(wc -w < "$current_file")
 echo -e "$content\n\n[Saved: $timestamp]\n[linecount=$lines]\n [words=$words]" > "$current_file"
 zenity --notification --text="Saved"
 else
-break
+ break
 fi
 done
